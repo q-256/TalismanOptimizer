@@ -5,9 +5,11 @@ import javax.swing.*;
 public class Main {
     JFrame frame;
     DisplayPanel panel_main;
+    PreperationPanel panel_prep;
     CompletionInfoPanel completionInfoPanel;
-    int width = 1525;
-    int height = 800;
+    double displayScaleFactor = 1;
+    int width = (int)(1525 * displayScaleFactor);
+    int height = (int)(800 * displayScaleFactor);
 
     String rarityNames[] = {"Common","Uncommon","Rare","Epic","Legendary","Mythic"};
     String reforgeNames[] = {"Forceful", "Superior", "Strong", "Itchy", "Hurtful","Strange"};
@@ -32,14 +34,16 @@ public class Main {
     }
     public Main(){
         generateReforgeStats();
-        frame = new JFrame("Talisman Optimizer v2.1 - by q256");
+        frame = new JFrame("Talisman Optimizer v2.2 - by q256");
         panel_main = new DisplayPanel();
-        panel_main.setBounds(0,0,width,height);
         frame.setSize(width, height);
-        frame.add(panel_main);
         frame.setLayout(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        panel_prep = new PreperationPanel();
+        frame.add(panel_prep);
+        panel_prep.setBounds(0,0,width,height);
     }
     void generateReforgeStats(){
         //str, cd, atc spd, def, health, speed, int
@@ -297,7 +301,7 @@ public class Main {
     }
 
     class DisplayPanel extends JPanel{
-        Color[] rarityColors = {Color.gray, Color.green, Color.blue, new Color(150, 0, 200), Color.orange, Color.cyan};
+        Color[] rarityColors = {Color.gray, Color.green, Color.blue, new Color(150, 0, 200), Color.orange, new Color(240,120,240)};
         JTextField[] inputFields = new JTextField[12];
         JLabel[] statLabels = new JLabel[9];
         JLabel[][] reforgeLabels = new JLabel[6][6];
@@ -319,62 +323,63 @@ public class Main {
         }
         void writeStaticText(Graphics2D g2d){
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
-            g2d.setFont(new Font("Serif", Font.PLAIN, 24));
-            g2d.drawString("Weapon Damage: ", 50, 90);
-            g2d.drawString("Strength: ", 50, 120);
-            g2d.drawString("Crit Damage: ", 50, 150);
-            g2d.drawString("Attack Speed: ", 50, 180);
-            g2d.setFont(new Font("Serif", Font.BOLD, 24));
-            g2d.drawString("Stats Without Talismans:", 50, 50);
-            g2d.drawString("Number of Talismans: ", 50, 250);
-            g2d.drawString("Additional Settings:", 50, 540);
+            g2d.setFont(new Font("Serif", Font.PLAIN, (int)(24*displayScaleFactor)));
+            g2d.drawString("Weapon Damage: ", (int)(50*displayScaleFactor), (int)(90*displayScaleFactor));
+            g2d.drawString("Strength: ", (int)(50*displayScaleFactor), (int)(120*displayScaleFactor));
+            g2d.drawString("Crit Damage: ", (int)(50*displayScaleFactor), (int)(150*displayScaleFactor));
+            g2d.drawString("Attack Speed: ", (int)(50*displayScaleFactor), (int)(180*displayScaleFactor));
+            g2d.setFont(new Font("Serif", Font.BOLD, (int)(24*displayScaleFactor)));
+            g2d.drawString("Stats Without Talismans:", (int)(50*displayScaleFactor), (int)(50*displayScaleFactor));
+            g2d.drawString("Number of Talismans: ", (int)(50*displayScaleFactor), (int)(250*displayScaleFactor));
+            g2d.drawString("Additional Settings:", (int)(50*displayScaleFactor), (int)(540*displayScaleFactor));
             for(int ii=0 ;ii<6; ii++){
                 g2d.setColor(rarityColors[ii]);
-                g2d.drawString(rarityNames[ii]+":", 50, 300+ii*35);
-                g2d.drawString(rarityNames[ii]+":", 790, 300+ii*35);
+                g2d.drawString(rarityNames[ii]+":", (int)(50*displayScaleFactor), (int)((300+ii*35)*displayScaleFactor));
+                g2d.drawString(rarityNames[ii]+":", (int)(790*displayScaleFactor), (int)((300+ii*35)*displayScaleFactor));
             }
             g2d.setColor(new Color(0, 150, 0));
-            g2d.setFont(new Font("Serif", Font.BOLD, 36));
+            g2d.setFont(new Font("Serif", Font.BOLD, (int)(36*displayScaleFactor)));
             int titleLength = g2d.getFontMetrics().stringWidth("Talisman Optimizer");
-            g2d.drawString("Talisman Optimizer", (width-titleLength)/2-90, 50);
-            g2d.setStroke(new BasicStroke(2));
-            g2d.drawLine((width-titleLength)/2-90, 53, (width+titleLength)/2-90, 53);
+            g2d.drawString("Talisman Optimizer", (width-titleLength)/2-(int)(90*displayScaleFactor), (int)(50*displayScaleFactor));
+            g2d.setStroke(new BasicStroke(1+(int)(displayScaleFactor+0.5)));
+            g2d.drawLine((width-titleLength)/2-(int)(90*displayScaleFactor), (int)(53*displayScaleFactor), (width+titleLength)/2-(int)(90*displayScaleFactor), (int)(53*displayScaleFactor));
             g2d.setColor(Color.black);
-            g2d.setFont(new Font("Serif", Font.PLAIN, 24));
-            g2d.drawString(" - by q256", (width+titleLength)/2-90, 50);
-            g2d.drawString("v 2.1", width-70, height-50);
+            g2d.setFont(new Font("Serif", Font.PLAIN, (int)(24*displayScaleFactor)));
+            g2d.drawString(" - by q256", (width+titleLength)/2-(int)(90*displayScaleFactor), (int)(50*displayScaleFactor));
+            g2d.drawString("v 2.2", width-30-(int)(g2d.getFontMetrics().stringWidth("v 2.2")*displayScaleFactor), height-35-(int)(15*displayScaleFactor));
             for(int ii=0; ii<6; ii++){
-                g2d.drawString(reforgeNames[ii], 955+ii*100-g2d.getFontMetrics().stringWidth(reforgeNames[ii])/2, 250);
+                g2d.drawString(reforgeNames[ii], (int)((955+ii*100-g2d.getFontMetrics().stringWidth(reforgeNames[ii])/2)*displayScaleFactor), (int)(250*displayScaleFactor));
             }
-            g2d.drawString("Best Reforges:", 790, 200);
-            g2d.drawString("Completion Info:", 525-g2d.getFontMetrics().stringWidth("Completion Info:")/2, 200);
-            g2d.drawString("Total Damage:",960,50);
-            g2d.drawString("Total Strength:",960,80);
-            g2d.drawString("Total Crit Damage:",960,110);
-            g2d.drawString("Total Attack Speed:",960,140);
-            g2d.drawString("DPS:",960,170);
-            g2d.drawString("Extra Health:", 1265, 50);
-            g2d.drawString("Extra Defense:", 1265, 80);
-            g2d.drawString("Extra Intelligence:", 1265, 110);
-            g2d.drawString("Extra Speed:", 1265, 140);
-            g2d.setFont(new Font("SERIF", Font.PLAIN, 20));
-            g2d.drawString("+", 50, 580);
-            g2d.drawString("% boost on all stats", 115, 580);
-            g2d.drawString("Attack Speed multiplier:", 50, 605);
+            g2d.drawString("Best Reforges:", (int)(790*displayScaleFactor), (int)(200*displayScaleFactor));
+            g2d.drawString("Completion Info:", (int)((525-g2d.getFontMetrics().stringWidth("Completion Info:")/2)*displayScaleFactor), (int)(200*displayScaleFactor));
+            g2d.drawString("Total Damage:",(int)(960*displayScaleFactor),(int)(50*displayScaleFactor));
+            g2d.drawString("Total Strength:",(int)(960*displayScaleFactor),(int)(80*displayScaleFactor));
+            g2d.drawString("Total Crit Damage:",(int)(960*displayScaleFactor),(int)(110*displayScaleFactor));
+            g2d.drawString("Total Attack Speed:",(int)(960*displayScaleFactor),(int)(140*displayScaleFactor));
+            g2d.drawString("DPS:",(int)(960*displayScaleFactor),(int)(170*displayScaleFactor));
+            g2d.drawString("Extra Health:", (int)(1265*displayScaleFactor), (int)(50*displayScaleFactor));
+            g2d.drawString("Extra Defense:", (int)(1265*displayScaleFactor), (int)(80*displayScaleFactor));
+            g2d.drawString("Extra Intelligence:", (int)(1265*displayScaleFactor), (int)(110*displayScaleFactor));
+            g2d.drawString("Extra Speed:", (int)(1265*displayScaleFactor), (int)(140*displayScaleFactor));
+            g2d.setFont(new Font("SERIF", Font.PLAIN, (int)(20*displayScaleFactor)));
+            g2d.drawString("+", (int)(50*displayScaleFactor), (int)(580*displayScaleFactor));
+            g2d.drawString("% boost on all stats", (int)(110*displayScaleFactor), (int)(580*displayScaleFactor));
+            g2d.drawString("Attack Speed multiplier:", (int)(50*displayScaleFactor), (int)(605*displayScaleFactor));
         }
         void createTextFields(){
             for(int ii=0; ii<12; ii++){
                 inputFields[ii] = new JTextField("0.0");
-                inputFields[ii].setBounds(230, 140+ii*35, 40, 24);
+                inputFields[ii].setBounds((int)(230*displayScaleFactor), (int)((140+ii*35)*displayScaleFactor), (int)(40*displayScaleFactor), (int)(24*displayScaleFactor));
                 if(ii<10 && ii>3)inputFields[ii].setText(""+numberOfTalismans[ii-4]);
+                inputFields[ii].setFont(new Font("Dialog", Font.PLAIN, (int)(12*displayScaleFactor)));
                 add(inputFields[ii]);
             }
-            inputFields[0].setBounds(230, 70, 40,24);
-            inputFields[1].setBounds(230, 100, 40,24);
-            inputFields[2].setBounds(230, 130, 40,24);
-            inputFields[3].setBounds(230, 160, 40,24);
-            inputFields[10].setBounds(65,560,50,25);
-            inputFields[11].setBounds(250,585,50,25);
+            inputFields[0].setBounds((int)(230*displayScaleFactor), (int)(70*displayScaleFactor), (int)(40*displayScaleFactor),(int)(24*displayScaleFactor));
+            inputFields[1].setBounds((int)(230*displayScaleFactor), (int)(100*displayScaleFactor), (int)(40*displayScaleFactor),(int)(24*displayScaleFactor));
+            inputFields[2].setBounds((int)(230*displayScaleFactor), (int)(130*displayScaleFactor), (int)(40*displayScaleFactor),(int)(24*displayScaleFactor));
+            inputFields[3].setBounds((int)(230*displayScaleFactor), (int)(160*displayScaleFactor), (int)(40*displayScaleFactor),(int)(24*displayScaleFactor));
+            inputFields[10].setBounds((int)(65*displayScaleFactor),(int)(560*displayScaleFactor), (int)(50*displayScaleFactor),(int)(24*displayScaleFactor));
+            inputFields[11].setBounds((int)(250*displayScaleFactor),(int)(585*displayScaleFactor), (int)(50*displayScaleFactor),(int)(24*displayScaleFactor));
             inputFields[0].setText("290");
             inputFields[1].setText("200");
             inputFields[2].setText("200");
@@ -384,8 +389,8 @@ public class Main {
         }
         void createButtons(){
             JButton calculation_button = new JButton("Calculate");
-            calculation_button.setFont(new Font("Serif", Font.BOLD, 30));
-            calculation_button.setBounds(400, 520, 250, 80);
+            calculation_button.setFont(new Font("Serif", Font.BOLD,  (int)(30*displayScaleFactor)));
+            calculation_button.setBounds( (int)(400*displayScaleFactor),(int)(520*displayScaleFactor),  (int)(250*displayScaleFactor),(int)(80*displayScaleFactor));
             add(calculation_button);
 
             calculation_button.addActionListener(e -> {
@@ -442,23 +447,23 @@ public class Main {
         }
         void createCompletionPanel(){
             completionInfoPanel = new CompletionInfoPanel();
-            completionInfoPanel.setBounds(400,225, 250,250);
+            completionInfoPanel.setBounds( (int)(400*displayScaleFactor),(int)(225*displayScaleFactor),  (int)(250*displayScaleFactor),(int)(250*displayScaleFactor));
             add(completionInfoPanel);
         }
         void createLabels(){
             for(int ii=0; ii<9; ii++){
                 statLabels[ii] = new JLabel("0");
-                if(ii<5) statLabels[ii].setBounds(1155, 26+ii*30, 90, 30);
-                else statLabels[ii].setBounds(1440, 26+(ii-5)*30, 90, 30);
-                statLabels[ii].setFont(new Font("Serif", Font.PLAIN, 24));
+                if(ii<5) statLabels[ii].setBounds((int)(1155*displayScaleFactor), (int)((26+ii*30)*displayScaleFactor), (int)(90*displayScaleFactor),(int)(30*displayScaleFactor));
+                else statLabels[ii].setBounds((int)(1440*displayScaleFactor), (int)((26+(ii-5)*30)*displayScaleFactor), (int)(90*displayScaleFactor),(int)(30*displayScaleFactor));
+                statLabels[ii].setFont(new Font("Serif", Font.PLAIN,  (int)(24*displayScaleFactor)));
                 statLabels[ii].setOpaque(true);
                 add(statLabels[ii]);
             }
             for(int ii=0; ii<6; ii++){
                 for(int jj=0; jj<6; jj++){
                     reforgeLabels[ii][jj] = new JLabel("0");
-                    reforgeLabels[ii][jj].setBounds(940+jj*100, 280+ii*35 , 60, 30);
-                    reforgeLabels[ii][jj].setFont(new Font("Serif", Font.PLAIN, 24));
+                    reforgeLabels[ii][jj].setBounds( (int)((940+jj*100)*displayScaleFactor), (int)((280+ii*35)*displayScaleFactor), (int)(60*displayScaleFactor), (int)(30*displayScaleFactor));
+                    reforgeLabels[ii][jj].setFont(new Font("Serif", Font.PLAIN,  (int)(24*displayScaleFactor)));
                     reforgeLabels[ii][jj].setOpaque(true);
                     add(reforgeLabels[ii][jj]);
                 }
@@ -467,10 +472,10 @@ public class Main {
         void createCheckBoxes(){
             checkBoxes[0] = new JCheckBox("Mastiff");
             checkBoxes[1] = new JCheckBox("Shaman/Pooch");
-            checkBoxes[0].setBounds(50, 615, 150, 20);
-            checkBoxes[1].setBounds(50, 640, 150, 20);
-            checkBoxes[0].setFont(new Font("Serif", Font.PLAIN, 20));
-            checkBoxes[1].setFont(new Font("Serif", Font.PLAIN, 20));
+            checkBoxes[0].setBounds( (int)(50*displayScaleFactor), (int)(615*displayScaleFactor), (int)(150*displayScaleFactor), (int)(20*displayScaleFactor));
+            checkBoxes[1].setBounds( (int)(50*displayScaleFactor), (int)(640*displayScaleFactor), (int)(150*displayScaleFactor), (int)(20*displayScaleFactor));
+            checkBoxes[0].setFont(new Font("Serif", Font.PLAIN, (int)(20*displayScaleFactor)));
+            checkBoxes[1].setFont(new Font("Serif", Font.PLAIN, (int)(20*displayScaleFactor)));
             add(checkBoxes[0]);
             add(checkBoxes[1]);
         }
@@ -514,17 +519,69 @@ public class Main {
             Graphics2D g2d = (Graphics2D)g;
             g2d.setColor(new Color(200,200,200));
             g2d.setStroke(new BasicStroke(3));
-            g2d.drawRect(1,1,248,248);
+            g2d.drawRect(1,1,(int)(248*displayScaleFactor),(int)(248*displayScaleFactor));
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
             g2d.setColor(Color.black);
-            g2d.setFont(new Font("Serif", Font.PLAIN, 24));
+            g2d.setFont(new Font("Serif", Font.PLAIN,  (int)(24*displayScaleFactor)));
 
             if(calculator instanceof Calculator_highestSum){
-                g2d.drawString("100% completed", 125-g2d.getFontMetrics().stringWidth("100% completed")/2, 40);
-                g2d.drawString("Processing Time:", 125-g2d.getFontMetrics().stringWidth("Processing Time")/2, 90);
+                g2d.drawString("100% completed", (int)(125*displayScaleFactor)-g2d.getFontMetrics().stringWidth("100% completed")/2,  (int)(40*displayScaleFactor));
+                g2d.drawString("Processing Time:",  (int)(125*displayScaleFactor)-g2d.getFontMetrics().stringWidth("Processing Time")/2, (int)(90*displayScaleFactor));
                 String time = String.format("%.6f", Math.floor(calculator.totalTime/1000)/1000000);
-                g2d.drawString(time+" seconds", 125-g2d.getFontMetrics().stringWidth(time+" seconds")/2, 120);
+                g2d.drawString(time+" seconds",  (int)(125*displayScaleFactor)-g2d.getFontMetrics().stringWidth(time+" seconds")/2,  (int)(120*displayScaleFactor));
             }
+        }
+    }
+    class PreperationPanel extends JPanel {
+        JTextField inputField;
+        public PreperationPanel(){
+            setLayout(null);
+
+            inputField = new JTextField(""+(int)(displayScaleFactor*100));
+            inputField.setBounds(200, 150, 60, 30);
+            add(inputField);
+
+            JButton button1 = new JButton("Apply");
+            button1.setBounds(150,200,80,50);
+            button1.addActionListener(e -> {
+                getInputs();
+                applySettings();
+            });
+            add(button1);
+
+            JButton button2 = new JButton("Start");
+            button2.setBounds(230,200,80,50);
+            button2.addActionListener(e -> {
+                getInputs();
+                applySettings();
+                panel_main = new DisplayPanel();
+                frame.remove(panel_prep);
+                frame.add(panel_main);
+                panel_main.setBounds(0,0,width,height);
+                frame.repaint();
+            });
+            add(button2);
+
+            JLabel label1 = new JLabel("<html>Enter how big you want this app to be.<br>Enter a larger number for a larger app.<br>Enter a smaller number for a smaller app.<br>Click \"Apply\" to test it out.<br>Once you are happy with the size of the app<br>click \"Start\" to use the talisman optimizer.");
+            label1.setBounds(100,0,300,150);
+            add(label1);
+            JLabel label2 = new JLabel("%");
+            label2.setBounds(260,150,50,30);
+            add(label2);
+        }
+        void getInputs(){
+            try {
+                if(Double.parseDouble(inputField.getText())<25)inputField.setText("25");
+            }
+            catch(NumberFormatException e){
+                inputField.setText("100");
+            }
+            displayScaleFactor = Double.parseDouble(inputField.getText())/100;
+        }
+        void applySettings(){
+            width = (int)(1525 * displayScaleFactor);
+            height = (int)(800 * displayScaleFactor);
+            frame.setSize(width,height);
         }
     }
 }
