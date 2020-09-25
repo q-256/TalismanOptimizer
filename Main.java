@@ -2,7 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class Main {
-    String version = "v2.3";
+    String version = "v2.3.1";
     JFrame frame;
     DisplayPanel panel_main;
     PreperationPanel panel_prep;
@@ -91,11 +91,11 @@ public class Main {
     double getDamage(double str, double cd){ return (damage_base+str/5) * (1+str/100) * (1+cd/100); }
     double getDPS(double str, double cd, double atcSpd){ return (getDamage(str, cd)*(2+atcSpd*atcSpd_multiplier/50));}
     int getOptimalStr(double totalStrCd, double cdMultiplier){
-        double tt = totalStrCd;
+        double tt = totalStrCd*(1+statMultiplier);
         double dd = damage_base;
         double cc = cdMultiplier;
         if(hasTaraHelm) return (int)((10*cc*tt + (5-50*cc)*dd - 1000*cc + 1100 + 5*Math.sqrt(4*cc*cc*tt*tt + ((20*cc*cc - 2*cc)*dd + 400*cc*cc + 760*cc)*tt + (100*cc*cc - 20*cc + 1)*dd*dd +
-                (-2000*cc*cc + 2400*cc - 220)*dd + 40000*cc*cc + 32000*cc + 36400))/(30*cc-3)+0.5);
+                (-2000*cc*cc + 2400*cc - 220)*dd + 40000*cc*cc + 32000*cc + 36400))/(30*cc-3)/(1+statMultiplier)+0.5);
 
         else return (int)((cc*tt - 5*cc*dd -100*cc + 100 + Math.sqrt(cc*cc*tt*tt + (5*cc*cc*dd + 100*cc*cc + 200*cc)*tt + 25*cc*cc*dd*dd + (500*cc - 500*cc*cc)*dd +
                     10000*cc*cc + 10000*cc + 10000 ))/ 3 / cc / (1+statMultiplier) + 0.5);
